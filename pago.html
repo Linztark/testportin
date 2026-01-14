@@ -109,6 +109,42 @@
 
       <div class="grid">
         <div class="card">
+          <label>Fill 20</label>
+          <div class="muted">
+            Vacía la tabla y comprueba que count == 0 Llena 20 registros y luego comprueba que count == 20
+          </div>
+          <div style="margin-top: 8px">
+            <button id="btnFill20">Fill 20</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <label>Empty</label>
+          <div class="muted">Elimina todos los registros de la tabla</div>
+          <div style="margin-top: 8px">
+            <button id="btnEmpty">Empty</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <label>Fill 100</label>
+          <div class="muted">
+            Vacía la tabla y comprueba que count == 0 Llena 100 registros y luego comprueba que count == 100
+          </div>
+          <div style="margin-top: 8px">
+            <button id="btnFill100">Fill 100</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <label>Get count</label>
+          <div class="muted">Devuelve el número total de registros</div>
+          <div style="margin-top: 8px">
+            <button id="btnGetCount">Get count</button>
+          </div>
+        </div>
+
+        <div class="card">
           <div class="row">
             <div style="flex: 1">
               <label>Get by id</label>
@@ -206,6 +242,58 @@
         if (!res.ok) throw { status: res.status, body: data };
         return data;
       }
+
+      document.getElementById("btnFill20").addEventListener("click", async () => {
+        log("POST /pago/fill/20");
+        try {
+          const data = await api("/fill/20", { method: "POST" });
+          log("Fill/20 result:", data);
+          const count = await api("/count", { method: "GET" });
+          log("Count after fill:", count);
+          if (count === 20) log("OK: count == 20");
+          else log("FALLO: count != 20");
+        } catch (e) {
+          log("Error en fill/20:", e);
+        }
+      });
+
+      document.getElementById("btnEmpty").addEventListener("click", async () => {
+        log("DELETE /pago/all");
+        try {
+          const data = await api("/all", { method: "DELETE" });
+          log("Empty result:", data);
+          const count = await api("/count", { method: "GET" });
+          log("Count after empty:", count);
+          if (count === 0) log("OK: count == 0 (tabla vacía)");
+          else log("FALLO: count != 0");
+        } catch (e) {
+          log("Error en empty:", e);
+        }
+      });
+
+      document.getElementById("btnFill100").addEventListener("click", async () => {
+        log("POST /pago/fill/100");
+        try {
+          const data = await api("/fill/100", { method: "POST" });
+          log("Fill/100 result:", data);
+          const count = await api("/count", { method: "GET" });
+          log("Count after fill:", count);
+          if (count === 100) log("OK: count == 100");
+          else log("FALLO: count != 100");
+        } catch (e) {
+          log("Error en fill/100:", e);
+        }
+      });
+
+      document.getElementById("btnGetCount").addEventListener("click", async () => {
+        log("GET /pago/count");
+        try {
+          const count = await api("/count", { method: "GET" });
+          log("Count result:", count);
+        } catch (e) {
+          log("Error en count:", e);
+        }
+      });
 
       document.getElementById("btnGet").addEventListener("click", async () => {
         const idRaw = document.getElementById("inputGetId").value;

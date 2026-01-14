@@ -64,6 +64,15 @@
         font-weight: 500;
         transition: all 0.2s ease;
         text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .count {
+        font-size: 0.85rem;
+        color: #999;
+        font-weight: 400;
       }
 
       a:hover {
@@ -71,6 +80,10 @@
         color: white;
         border-color: #0b74de;
         transform: translateX(4px);
+      }
+
+      a:hover .count {
+        color: #e0e0e0;
       }
 
       footer {
@@ -102,30 +115,116 @@
       <div class="divider"></div>
 
       <div class="grid">
-        <a href="articulo.html">📦 Artículo</a>
-        <a href="carrito.html">🛒 Carrito</a>
-        <a href="categoria.html">📂 Categoría</a>
-        <a href="club.html">⚽ Club</a>
-        <a href="comentario.html">💬 Comentario</a>
-        <a href="compra.html">🛍️ Compra</a>
-        <a href="cuota.html">💰 Cuota</a>
-        <a href="equipo.html">👥 Equipo</a>
-        <a href="factura.html">📄 Factura</a>
-        <a href="jugador.html">👤 Jugador</a>
-        <a href="liga.html">🏆 Liga</a>
-        <a href="noticia.html">📰 Noticia</a>
-        <a href="pago.html">💳 Pago</a>
-        <a href="partido.html">⚔️ Partido</a>
-        <a href="puntuacion.html">⭐ Puntuación</a>
-        <a href="temporada.html">📅 Temporada</a>
-        <a href="tipoarticulo.html">🏷️ Tipo Artículo</a>
-        <a href="tipousuario.html">👔 Tipo Usuario</a>
-        <a href="usuario.html">👨 Usuario</a>
+        <a href="articulo.html">
+          <span>📦 Artículo</span>
+          <span class="count" id="count-articulo">-</span>
+        </a>
+        <a href="carrito.html">
+          <span>🛒 Carrito</span>
+          <span class="count" id="count-carrito">-</span>
+        </a>
+        <a href="categoria.html">
+          <span>📂 Categoría</span>
+          <span class="count" id="count-categoria">-</span>
+        </a>
+        <a href="club.html">
+          <span>⚽ Club</span>
+          <span class="count" id="count-club">-</span>
+        </a>
+        <a href="comentario.html">
+          <span>💬 Comentario</span>
+          <span class="count" id="count-comentario">-</span>
+        </a>
+        <a href="compra.html">
+          <span>🛍️ Compra</span>
+          <span class="count" id="count-compra">-</span>
+        </a>
+        <a href="cuota.html">
+          <span>💰 Cuota</span>
+          <span class="count" id="count-cuota">-</span>
+        </a>
+        <a href="equipo.html">
+          <span>👥 Equipo</span>
+          <span class="count" id="count-equipo">-</span>
+        </a>
+        <a href="factura.html">
+          <span>📄 Factura</span>
+          <span class="count" id="count-factura">-</span>
+        </a>
+        <a href="jugador.html">
+          <span>👤 Jugador</span>
+          <span class="count" id="count-jugador">-</span>
+        </a>
+        <a href="liga.html">
+          <span>🏆 Liga</span>
+          <span class="count" id="count-liga">-</span>
+        </a>
+        <a href="noticia.html">
+          <span>📰 Noticia</span>
+          <span class="count" id="count-noticia">-</span>
+        </a>
+        <a href="pago.html">
+          <span>💳 Pago</span>
+          <span class="count" id="count-pago">-</span>
+        </a>
+        <a href="partido.html">
+          <span>⚔️ Partido</span>
+          <span class="count" id="count-partido">-</span>
+        </a>
+        <a href="puntuacion.html">
+          <span>⭐ Puntuación</span>
+          <span class="count" id="count-puntuacion">-</span>
+        </a>
+        <a href="temporada.html">
+          <span>📅 Temporada</span>
+          <span class="count" id="count-temporada">-</span>
+        </a>
+        <a href="tipoarticulo.html">
+          <span>🏷️ Tipo Artículo</span>
+          <span class="count" id="count-tipoarticulo">-</span>
+        </a>
+        <a href="tipousuario.html">
+          <span>👔 Tipo Usuario</span>
+          <span class="count" id="count-tipousuario">-</span>
+        </a>
+        <a href="usuario.html">
+          <span>👨 Usuario</span>
+          <span class="count" id="count-usuario">-</span>
+        </a>
       </div>
 
       <footer>
         <p>Selecciona un endpoint para ejecutar los tests</p>
       </footer>
     </div>
-  </body>
-</html>
+
+    <script>
+      const endpoints = [
+        "articulo", "carrito", "categoria", "club", "comentario", "compra", 
+        "cuota", "equipo", "factura", "jugador", "liga", "noticia", "pago", 
+        "partido", "puntuacion", "temporada", "tipoarticulo", "tipousuario", "usuario"
+      ];
+
+      const baseUrl = "http://127.0.0.1:8089";
+
+      async function fetchCount(endpoint) {
+        try {
+          const res = await fetch(`${baseUrl}/${endpoint}/count`);
+          if (!res.ok) return "?";
+          const count = await res.json();
+          return count > 0 ? count.toString() : "0";
+        } catch (e) {
+          return "?";
+        }
+      }
+
+      async function loadCounts() {
+        for (const endpoint of endpoints) {
+          const count = await fetchCount(endpoint);
+          const el = document.getElementById(`count-${endpoint}`);
+          if (el) el.textContent = count;
+        }
+      }
+
+      window.addEventListener("load", loadCounts);
+    </script>
